@@ -1,8 +1,20 @@
 import { Client } from 'node-appwrite';
+import twilio from 'twilio';
 
 // This is your Appwrite function
 // It's executed each time we get a request
 export default async ({ req, res, log, error }) => {
+
+  const accountSid = process.env.TWILIO_SID;
+  const authToken = process.wnv.TWILIO_AUTH_TOKEN;
+
+  try {
+    const client = twilio(accountSid, authToken);
+    log('Connected to Twilio successfully');
+  } catch (err) {
+    error(err.message);
+  }
+
   // Why not try the Appwrite SDK?
   //
   // const client = new Client()
