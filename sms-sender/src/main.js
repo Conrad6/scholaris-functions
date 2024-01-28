@@ -10,6 +10,11 @@ export default async ({ req, res, log, error }) => {
 
   try {
     const client = twilio(accountSid, authToken);
+    const message = await client.messages.create({
+      body: 'Hello from Scholaris 👋',
+      to: '+237654020651',
+      from: '+16075272192'
+    })
     log('Connected to Twilio successfully');
   } catch (err) {
     error(err.message);
