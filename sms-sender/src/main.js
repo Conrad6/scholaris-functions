@@ -12,10 +12,10 @@ export default async ({ req, res, log, error }) => {
     const client = twilio(accountSid, authToken);
     const message = await client.messages.create({
       body: 'Hello from Scholaris 👋',
-      to: '+237654020651',
-      from: process.env.TWILIO_PHONE_NUMBER
+      to: 'whatsapp:+237654020651',
+      from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`
     });
-    
+    // +16075272192
     log('Message sent successfully');
   } catch (err) {
     error('Failed to send message');
