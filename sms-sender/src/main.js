@@ -13,10 +13,12 @@ export default async ({ req, res, log, error }) => {
     const message = await client.messages.create({
       body: 'Hello from Scholaris 👋',
       to: '+237654020651',
-      from: '+16075272192'
-    })
-    log('Connected to Twilio successfully');
+      from: process.env.TWILIO_PHONE_NUMBER
+    });
+    
+    log('Message sent successfully');
   } catch (err) {
+    error('Failed to send message');
     error(err.message);
   }
 
@@ -31,7 +33,7 @@ export default async ({ req, res, log, error }) => {
   log('Hello, Logs!');
 
   // If something goes wrong, log an error
-  error('Hello, Errors!');
+  // error('Hello, Errors!');
 
   // The `req` object contains the request data
   if (req.method === 'GET') {
