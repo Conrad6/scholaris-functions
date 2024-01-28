@@ -6,7 +6,7 @@ import twilio from 'twilio';
 export default async ({ req, res, log, error }) => {
 
   const accountSid = process.env.TWILIO_SID;
-  const authToken = process.wnv.TWILIO_AUTH_TOKEN;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
 
   try {
     const client = twilio(accountSid, authToken);
