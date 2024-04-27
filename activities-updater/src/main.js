@@ -5,13 +5,13 @@ import { Client, Databases, ID} from 'node-appwrite';
 export default async ({ req, res, log, error }) => {
   // Why not try the Appwrite SDK?
   //
+  log(JSON.stringify(process.env));
   const client = new Client()
     .setEndpoint('https://api.scholaris.space/v1')
     .setProject(process.env.APPWRITE_FUNCTION_PROJECT_ID)
     .setKey(process.env.API_KEY);
   const db = new Databases(client);
 
-  log(JSON.stringify(process.env));
 
   try {
     // await db.createDocument(process.env.DB_ID, process.env.COLLECTION_ID, ID.unique(), {
