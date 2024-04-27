@@ -1,0 +1,36 @@
+{
+  "projectId": "6586b572b4b54e7b58b7",
+  "projectName": "Scholaris",
+  "functions": [
+    {
+      "$id": "65b6b0263a2b7efd489a",
+      "name": "SMS Sender",
+      "runtime": "node-18.0",
+      "execute": [],
+      "events": [],
+      "schedule": "",
+      "timeout": 15,
+      "enabled": true,
+      "logging": true,
+      "entrypoint": "src/main.js",
+      "commands": "npm install",
+      "ignore": ["node_modules", ".npm"],
+      "path": "sms-sender"
+    },
+    {
+      "$id": "662cf5b24ebb39f25654",
+      "name": "Activities Updater",
+      "runtime": "node-18.0",
+      "execute": [],
+      "events": [],
+      "schedule": "",
+      "timeout": 15,
+      "enabled": true,
+      "logging": true,
+      "entrypoint": "src/main.js",
+      "commands": "npm install",
+      "ignore": ["node_modules", ".npm"],
+      "path": "activities-updater"
+    }
+  ]
+}
