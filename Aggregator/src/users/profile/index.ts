@@ -2,11 +2,18 @@ import { Users } from "node-appwrite";
 import { NotFoundException, RequestContext } from "../../models";
 
 function maskText(text: string) {
-    const maskLength = Math.ceil(text.length * .8);
-    const leftVisibleSectionEnd = Math.ceil(text.length * .1);
-    const rightVisibleSectionStart = leftVisibleSectionEnd + maskLength + Math.ceil(text.length * .1);
+    const lengthToMask = Math.floor(text.length * 0.8);
 
-    return `${text.slice(0, leftVisibleSectionEnd)}${text.slice(leftVisibleSectionEnd, leftVisibleSectionEnd + maskLength).replaceAll(/./g, '*')}${text.slice(rightVisibleSectionStart)}`;
+    // Calculate the start and end positions for masking
+    const start = Math.floor((text.length - lengthToMask) / 2);
+    const end = start + lengthToMask;
+
+    // Create the masked text
+    const maskedText = text.substring(0, start) +
+        '*'.repeat(lengthToMask) +
+        text.substring(end);
+
+    return maskedText;
 }
 
 export async function get({ client, requestURL, user: principal }: RequestContext) {
