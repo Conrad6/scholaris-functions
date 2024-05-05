@@ -45,7 +45,7 @@ export class RequestHandler {
       if (error instanceof NotFoundException) {
         return response.send(error.message, 404);
       }
-      return response.send('Could not handle request');
+      return response.send('Could not handle request', 500);
     }
   }
 }
