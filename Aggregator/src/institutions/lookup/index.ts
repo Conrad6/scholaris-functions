@@ -9,7 +9,7 @@ export async function get({ client, user }: RequestContext) {
 
     const filters = [
         Query.orderAsc("name"),
-        Query.select(["name", "logo", "isLive", "slug", "visible", "$id", "$createdAt", "$updatedAt"]),
+        Query.select(["name", "description", "logo", "isLive", "slug", "visible", "$id", "$createdAt", "$updatedAt"]),
     ];
 
     const { documents, total } = await db.listDocuments<
