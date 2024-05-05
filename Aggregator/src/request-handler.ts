@@ -1,5 +1,5 @@
 import { Client, Models, Users } from "node-appwrite";
-import { RequestContext } from "./models";
+import { NotFoundException, RequestContext } from "./models";
 import { join } from 'path';
 import { pathToFileURL } from 'url';
 
@@ -44,6 +44,9 @@ export class RequestHandler {
       return result;
     } catch (error) {
       this.logger.error((error as Error).message);
+      if (error instanceof NotFoundException) {
+        return response.send(error.message, 404);
+      }
       return response.send('Could not handle request');
     }
   }

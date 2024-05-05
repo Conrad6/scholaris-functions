@@ -10,3 +10,9 @@ export type RequestContext<T = unknown> = {
     body?: Record<string, T>
     response?: any;
 }
+
+export class NotFoundException extends Error {
+    constructor(arg: string) {
+        super(`404 - Resource not found: ${arg}`);
+    }
+}
