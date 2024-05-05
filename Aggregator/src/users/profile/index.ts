@@ -2,7 +2,7 @@ import { Users } from "node-appwrite";
 import { NotFoundException, RequestContext } from "../../models";
 
 function maskText(text: string) {
-    const lengthToMask = Math.floor(text.length * 0.8);
+    const lengthToMask = Math.floor(text.length * 0.5);
 
     // Calculate the start and end positions for masking
     const start = Math.floor((text.length - lengthToMask) / 2);
