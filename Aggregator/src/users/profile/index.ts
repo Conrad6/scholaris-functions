@@ -1,6 +1,14 @@
 import { Users } from "node-appwrite";
 import { NotFoundException, RequestContext } from "../../models";
 
+function maskText(text: string) {
+    const maskLength = Math.ceil(text.length * .8);
+    const leftVisibleSectionEnd = Math.ceil(text.length * .1);
+    const rightVisibleSectionStart = leftVisibleSectionEnd + maskLength + Math.ceil(text.length * .1);
+
+    return `${text.slice(0, leftVisibleSectionEnd)}${text.slice(leftVisibleSectionEnd, leftVisibleSectionEnd + maskLength).replaceAll(/./g, '*')}${text.slice(rightVisibleSectionStart)}`;
+}
+
 export async function get({ client, requestURL, user: principal }: RequestContext) {
     const users = new Users(client);
     const userParam = requestURL.searchParams.get('id');
@@ -10,9 +18,9 @@ export async function get({ client, requestURL, user: principal }: RequestContex
 
     const result: Record<string, unknown> = {
         $id,
-        email,
-        name,
-        phone
+        email: maskText(email),
+        phone: maskText(phone),
+        name
     };
 
     if (principal && principal.$id == $id) {
