@@ -1,7 +1,7 @@
 import { Client, Models, Users } from "node-appwrite";
 import { NotFoundException, RequestContext } from "./models";
 import { join } from 'path';
-import { pathToFileURL } from 'url';
+import { pathToFileURL, URL } from 'url';
 
 export class RequestHandler {
   private readonly client: Client;
@@ -24,15 +24,13 @@ export class RequestHandler {
     if (body) {
       body = JSON.parse(body);
     }
-    // if (url.pathname == "/institutions/lookup" && request.method == "GET") {
-    const queryMap = url.searchParams;
 
     const context: RequestContext = {
       client: this.client,
       headers: request.headers,
       logger: this.logger,
       request,
-      requestURL: url as any,
+      requestURL: url,
       body,
       response,
       user

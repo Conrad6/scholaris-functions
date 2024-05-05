@@ -1,4 +1,5 @@
-import { Client, Models } from "node-appwrite"
+import { Client, Models } from "node-appwrite";
+import { URL } from "url";
 
 export type RequestContext<T = unknown> = {
     user?: Models.User<any>,
