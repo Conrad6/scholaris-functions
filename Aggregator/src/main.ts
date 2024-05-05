@@ -1,12 +1,20 @@
 
 // This is your Appwrite function
 
+import { NotFoundException } from "./models";
 import { RequestHandler } from "./request-handler";
 
 // It's executed each time we get a request
 export default async ({ req, res, log, error }: any) => {
-  const logger = { log, error };
-  const router = new RequestHandler(logger);
-  const result = await router.handleRequest(req, res);
-  return res.send(JSON.stringify(result), 200);
+  try {
+    const logger = { log, error };
+    const router = new RequestHandler(logger);
+    const result = await router.handleRequest(req, res);
+    return res.json(result, 200);
+  } catch (error) {
+    if (error instanceof NotFoundException) {
+      return res.send(error.message, 404);
+    }
+    return res.send('Could not handle request', 500);
+  }
 };
