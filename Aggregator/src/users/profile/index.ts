@@ -27,7 +27,10 @@ export async function get({ client, requestURL, user: principal }: RequestContex
         $id,
         email: maskText(email),
         phone: maskText(phone),
-        name
+        name,
+        prefs: {
+            avatar: prefs.avatar
+        }
     };
 
     if (prefs.publicEmail)
