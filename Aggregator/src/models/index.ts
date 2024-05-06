@@ -17,3 +17,13 @@ export class NotFoundException extends Error {
         super(`404 - Resource not found: ${arg}`);
     }
 }
+
+export type UserPreferences = Models.Preferences & {
+    theme: 'light' | 'dark',
+    country: string,
+    avatar?: string;
+    locale: string;
+    logo?: string;
+    publicEmail: boolean;
+    publicPhone: boolean;
+}
