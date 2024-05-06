@@ -42,7 +42,9 @@
             "$id": "6633320cd4c8c0c9e5e4",
             "name": "Aggregator",
             "runtime": "bun-1.0",
-            "execute": ["any"],
+            "execute": [
+                "any"
+            ],
             "events": [],
             "schedule": "",
             "timeout": 15,
@@ -55,6 +57,24 @@
                 ".npm"
             ],
             "path": "Aggregator"
+        },
+        {
+            "$id": "event-worker",
+            "name": "Event worker",
+            "runtime": "bun-1.0",
+            "execute": [],
+            "events": ["users.*.create"],
+            "schedule": "",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.ts",
+            "commands": "bun install",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "path": "functions/event-worker"
         }
     ]
 }
