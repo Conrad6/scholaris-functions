@@ -11,8 +11,6 @@ export default async function handleRequest(req: any, logger: Logger) {
 
     const event = req.headers['x-appwrite-event'];
 
-    logger.log(JSON.stringify(req.headers));
-
     const eventContext: EventContext = {
         client,
         event,
@@ -21,7 +19,9 @@ export default async function handleRequest(req: any, logger: Logger) {
 
     if (EventPatterns.onAnyUserCreated.test(event))
         return await import('./handlers/user-created').then(({ default: fn }) => fn(eventContext));
-    else if (EventPatterns.onAnyUserSessionCreated.test(event))
+    else if (EventPatterns.onAnyUserSessionCreated.test(event)) {
+        logger.log('./handlers/user-session-created');
         return await import('./handlers/user-session-created').then(({ default: fn }) => fn(eventContext));
+    }
     else throw new NoHandlerException(event);
 }
