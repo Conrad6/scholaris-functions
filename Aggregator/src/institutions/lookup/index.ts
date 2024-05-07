@@ -3,7 +3,7 @@ import { RequestContext } from "../../models";
 const dbId = "6587eefbaf2d45dc4407";
 const institutionCollectionId = "659074c14a88d2072f38";
 
-export async function get({ client, user }: RequestContext) {
+export async function GET({ client, user }: RequestContext) {
     const db = new Databases(client);
     const teams = new Teams(client);
 

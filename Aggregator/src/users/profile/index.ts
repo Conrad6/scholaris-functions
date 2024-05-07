@@ -16,7 +16,7 @@ function maskText(text: string) {
     return maskedText;
 }
 
-export async function get({ client, requestURL, user: principal }: RequestContext) {
+export async function GET({ client, requestURL, user: principal }: RequestContext) {
     const users = new Users(client);
     const userParam = requestURL.searchParams.get('id');
     if (!userParam) throw new NotFoundException(userParam ?? 'User ID');

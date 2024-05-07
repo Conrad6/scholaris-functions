@@ -38,7 +38,7 @@ export class RequestHandler {
 
     try {
       const moduleUrl = pathToFileURL(join(__dirname, url.pathname)).toString();
-      const result = await import(moduleUrl).then((module) => module[request.method.toLowerCase()](context));
+      const result = await import(moduleUrl).then((module) => module[request.method.toUpperCase()](context));
       return result;
     } catch (error) {
       this.logger.error((error as Error).message);

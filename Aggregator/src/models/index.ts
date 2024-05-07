@@ -1,8 +1,18 @@
 import { Client, Models } from "node-appwrite";
 import { URL } from "url";
 
+export type UserPreferences = Models.Preferences & {
+    theme: 'light' | 'dark',
+    country: string,
+    avatar?: string;
+    locale: string;
+    logo?: string;
+    publicEmail: boolean;
+    publicPhone: boolean;
+}
+
 export type RequestContext<T = unknown> = {
-    user?: Models.User<any>,
+    user?: Models.User<UserPreferences>,
     requestURL: URL;
     client: Client;
     headers: Record<string, string>;
@@ -18,12 +28,16 @@ export class NotFoundException extends Error {
     }
 }
 
-export type UserPreferences = Models.Preferences & {
-    theme: 'light' | 'dark',
-    country: string,
-    avatar?: string;
-    locale: string;
-    logo?: string;
-    publicEmail: boolean;
-    publicPhone: boolean;
+export class ForbiddenException extends Error {
+    constructor() {
+        super('Forbidden operation');
+    }
+}
+
+export type ScheduledOperation = Models.Document & {
+    scheduledDate: string;
+    executedAt?: string;
+    resources?: string[];
+    operation: string;
+    cancelled: boolean;
 }
