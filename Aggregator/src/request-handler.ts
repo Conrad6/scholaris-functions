@@ -16,7 +16,8 @@ export class RequestHandler {
     const url = new URL(request.url);
     const headers = request.headers;
     let user: Models.User<any> | undefined = undefined;
-    const userId = headers['x-appwrite-user-id']
+    const userId = headers['x-appwrite-user-id'];
+    this.logger.log(userId);
     if (userId) {
       user = await new Users(this.client).get(userId)
     }
