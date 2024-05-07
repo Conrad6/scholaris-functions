@@ -20,6 +20,8 @@ export default async function handleRequest(req: any, logger: { log: (arg: strin
     switch (event) {
         case EventNames.onAnyUserCreated:
             return await import('./handlers/user-created').then(({ default: fn }) => fn(eventContext));
+        case EventNames.onAnyUserSessionCreated:
+            return await import('./handlers/user-session-created').then(({ default: fn }) => fn(eventContext));
         default: throw new NoHandlerException(event);
     }
 }

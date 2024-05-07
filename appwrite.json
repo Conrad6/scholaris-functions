@@ -63,7 +63,10 @@
             "name": "Event worker",
             "runtime": "bun-1.0",
             "execute": [],
-            "events": ["users.*.create"],
+            "events": [
+                "users.*.create",
+                "users.*.sessions.*.create"
+            ],
             "schedule": "",
             "timeout": 15,
             "enabled": true,
