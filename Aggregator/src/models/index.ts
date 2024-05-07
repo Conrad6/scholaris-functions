@@ -37,7 +37,7 @@ export class ForbiddenException extends Error {
 export type ScheduledOperation = Models.Document & {
     scheduledDate: string;
     executedAt?: string;
-    resources?: string[];
+    resource: string;
     operation: string;
     cancelled: boolean;
 }
