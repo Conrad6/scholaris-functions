@@ -1,9 +1,9 @@
 import { Client } from "node-appwrite";
-import { EventNames } from "./event-names";
-import { NoHandlerException } from "./exception/no-handler-exception";
-import { EventContext } from "./types";
+import { EventContext, Logger } from "./types";
+import { EventPatterns } from './event-patterns';
+import { NoHandlerException } from './exception/no-handler-exception';
 
-export default async function handleRequest(req: any, logger: { log: (arg: string) => void, error: (error: Error | string) => void }) {
+export default async function handleRequest(req: any, logger: Logger) {
     const client = new Client()
         .setEndpoint(String(Bun.env['APPWRITE_ENDPOINT']))
         .setProject(String(Bun.env['APPWRITE_FUNCTION_PROJECT_ID']))
@@ -14,14 +14,14 @@ export default async function handleRequest(req: any, logger: { log: (arg: strin
     logger.log(JSON.stringify(req.headers));
 
     const eventContext: EventContext = {
-        client
+        client,
+        event,
+        logger
     };
 
-    switch (event) {
-        case EventNames.onAnyUserCreated:
-            return await import('./handlers/user-created').then(({ default: fn }) => fn(eventContext));
-        case EventNames.onAnyUserSessionCreated:
-            return await import('./handlers/user-session-created').then(({ default: fn }) => fn(eventContext));
-        default: throw new NoHandlerException(event);
-    }
+    if (EventPatterns.onAnyUserCreated.test(event))
+        return await import('./handlers/user-created').then(({ default: fn }) => fn(eventContext));
+    else if (EventPatterns.onAnyUserSessionCreated.test(event))
+        return await import('./handlers/user-session-created').then(({ default: fn }) => fn(eventContext));
+    else throw new NoHandlerException(event);
 }
