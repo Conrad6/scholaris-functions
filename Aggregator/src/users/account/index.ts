@@ -13,7 +13,7 @@ export async function DELETE({ client, user }: RequestContext) {
     const scheduledDate = new Date(Date.now() + 2_592_000_000); // 30 days
     const doc = {
         scheduledDate,
-        resources: `users::${user.$id}`,
+        resource: `users::${user.$id}`,
         operation: 'delete'
     }
     const result = await db.createDocument<ScheduledOperation>(mainDbId, schedulesCollectionId, ID.unique(), doc, [
