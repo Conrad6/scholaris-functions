@@ -21,7 +21,10 @@ export async function GET({ client, requestURL, user: principal }: RequestContex
     const userParam = requestURL.searchParams.get('id');
     if (!userParam) throw new NotFoundException(userParam ?? 'User ID');
 
-    const { $id, email, name, phone, emailVerification, phoneVerification, prefs } = await users.get<UserPreferences>(userParam);
+    const foundUser = await users.get<UserPreferences>(userParam);
+    if (!foundUser) throw new NotFoundException(userParam ?? 'User ID');
+
+    const { $id, email, name, phone, emailVerification, phoneVerification, prefs } = foundUser;
 
     const result: Record<string, unknown> = {
         $id,

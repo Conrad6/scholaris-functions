@@ -4,9 +4,12 @@ import { EventContext, ScheduledOperation } from "../types";
 const schedulesCollectionId = 'schedules';
 const dbId = String(Bun.env['MAIN_DB_ID']);
 
-export default async function onSessionCreated({ client, event }: EventContext) {
+export default async function onSessionCreated({ logger, client, event }: EventContext) {
     const db = new Databases(client);
     const userId = event.split('.')[1];
+    logger.log(userId);
+    logger.log(event);
+    logger.log(dbId);
 
     const docs = await db.listDocuments<ScheduledOperation>(dbId, schedulesCollectionId, [
         Query.equal('resource', `users::${userId}`),
