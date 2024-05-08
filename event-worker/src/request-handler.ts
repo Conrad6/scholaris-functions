@@ -17,6 +17,8 @@ export default async function handleRequest(req: any, logger: Logger) {
         logger
     };
 
+    logger.log(JSON.stringify(eventContext));
+
     if (EventPatterns.onAnyUserCreated.test(event))
         return await import('./handlers/user-created').then(({ default: fn }) => fn(eventContext));
     else if (EventPatterns.onAnyUserSessionCreated.test(event)) {
