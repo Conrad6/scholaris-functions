@@ -14,7 +14,6 @@ export default async function onSessionCreated({ logger, client, event }: EventC
         Query.isNull('executedAt')
     ]);
 
-    logger.log(JSON.stringify(docs));
     if (docs.total == 0) return;
 
     for (const doc of docs.documents) {
