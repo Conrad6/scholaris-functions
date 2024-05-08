@@ -12,7 +12,7 @@ export default async function onSessionCreated({ logger, client, event }: EventC
     logger.log(dbId);
 
     const docs = await db.listDocuments<ScheduledOperation>(dbId, schedulesCollectionId, [
-        Query.equal('resource', `users::${userId}`),
+        Query.equal('resource', `users:${userId}`),
         Query.equal('cancelled', false),
         Query.equal('operation', 'delete'),
         Query.isNull('executedAt')
