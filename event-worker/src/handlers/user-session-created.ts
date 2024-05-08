@@ -7,16 +7,14 @@ const dbId = String(Bun.env['MAIN_DB_ID']);
 export default async function onSessionCreated({ logger, client, event }: EventContext) {
     const db = new Databases(client);
     const userId = event.split('.')[1];
-    logger.log(userId);
-    logger.log(event);
-    logger.log(dbId);
-
     const docs = await db.listDocuments<ScheduledOperation>(dbId, schedulesCollectionId, [
         Query.equal('resource', `users:${userId}`),
         Query.equal('cancelled', false),
         Query.equal('operation', 'delete'),
         Query.isNull('executedAt')
     ]);
+
+    logger.log(JSON.stringify(docs));
     if (docs.total == 0) return;
 
     for (const doc of docs.documents) {
