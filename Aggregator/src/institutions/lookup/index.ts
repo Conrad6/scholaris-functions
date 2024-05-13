@@ -3,7 +3,7 @@ import { RequestContext } from "../../models";
 const dbId = "6587eefbaf2d45dc4407";
 const institutionCollectionId = "659074c14a88d2072f38";
 
-export async function GET({ client, user }: RequestContext) {
+export async function GET({ client, user, logger }: RequestContext) {
     const db = new Databases(client);
     const teams = new Teams(client);
 
@@ -23,13 +23,17 @@ export async function GET({ client, user }: RequestContext) {
         let isSubscribed = false;
         let roles = Array<string>();
         if (!!user) {
-            const team = await teams.get(document.$id);
-            if(!team) continue;
-            const { total, memberships } = await teams.listMemberships(document.$id, [
-                Query.equal("userId", user.$id),
-            ]);
-            roles = [...new Set(memberships.flatMap(m => m.roles))];
-            isSubscribed = total > 0;
+            try {
+                const team = await teams.get(document.$id);
+                if (!team) continue;
+                const { total, memberships } = await teams.listMemberships(document.$id, [
+                    Query.equal("userId", user.$id),
+                ]);
+                roles = [...new Set(memberships.flatMap(m => m.roles))];
+                isSubscribed = total > 0;
+            } catch (err) {
+                logger.error((err as Error).message);
+            }
         }
 
         if (isSubscribed || (document.isLive && document.visible))
