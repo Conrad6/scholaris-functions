@@ -23,6 +23,8 @@ export async function GET({ client, user }: RequestContext) {
         let isSubscribed = false;
         let roles = Array<string>();
         if (!!user) {
+            const team = await teams.get(document.$id);
+            if(!team) continue;
             const { total, memberships } = await teams.listMemberships(document.$id, [
                 Query.equal("userId", user.$id),
             ]);

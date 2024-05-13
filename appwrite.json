@@ -77,7 +77,25 @@
                 "node_modules",
                 ".npm"
             ],
-            "path": "functions/event-worker"
+            "path": "event-worker"
+        },
+        {
+            "$id": "663f62c5000403471414",
+            "name": "Cron Jobs",
+            "runtime": "bun-1.0",
+            "execute": [],
+            "events": [],
+            "schedule": "",
+            "timeout": 15,
+            "enabled": true,
+            "logging": true,
+            "entrypoint": "src/main.ts",
+            "commands": "bun install",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "path": "cron-jobs"
         }
     ]
 }

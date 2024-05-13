@@ -34,6 +34,18 @@ export class ForbiddenException extends Error {
     }
 }
 
+export class UnauthorizedException extends Error {
+    constructor() {
+        super('Unauthorized operation');
+    }
+}
+
+export class BadRequestException extends Error {
+    constructor(msg: string) {
+        super(msg)
+    }
+}
+
 export type ScheduledOperation = Models.Document & {
     scheduledDate: string;
     executedAt?: string;
