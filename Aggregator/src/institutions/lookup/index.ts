@@ -3,14 +3,20 @@ import { RequestContext } from "../../models";
 const dbId = "6587eefbaf2d45dc4407";
 const institutionCollectionId = "659074c14a88d2072f38";
 
-export async function GET({ client, user, logger }: RequestContext) {
+export async function GET({ client, user, logger, requestURL: { searchParams } }: RequestContext) {
     const db = new Databases(client);
     const teams = new Teams(client);
+    const cursor = searchParams.get('cursor');
+    const size = Number(searchParams.get('size') ?? '20');
 
     const filters = [
+        Query.limit(size),
         Query.orderAsc("name"),
         Query.select(["name", "description", "logo", "isLive", "slug", "visible", "$id", "$createdAt", "$updatedAt"]),
     ];
+
+    if (cursor)
+        filters.push(Query.cursorAfter(cursor));
 
     const { documents, total } = await db.listDocuments<
         Models.Document & { isLive: boolean; visible: boolean }
