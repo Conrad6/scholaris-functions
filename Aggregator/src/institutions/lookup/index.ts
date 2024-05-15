@@ -55,5 +55,5 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
         document.isSubscribed = isSubscribed;
         document.engagementScore = 0;
     }
-    return fetchResults;
+    return fetchResults.filter(i => i.isSubscribed || (i.isLive && i.visible));
 }
