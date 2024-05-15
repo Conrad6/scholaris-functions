@@ -38,6 +38,7 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
 
     for (const document of fetchResults) {
         let isSubscribed = false;
+        let role: string | undefined = undefined;
         if (!!user) {
             try {
                 const team = await teams.get(document.$id);
@@ -46,13 +47,14 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
                     Query.equal("userId", user.$id),
                 ]);
                 isSubscribed = total > 0;
-                document.role = memberships[0].roles[0]
+                role = memberships[0].roles[0];
             } catch (err) {
                 logger.error((err as Error).message);
             }
         }
 
         document.isSubscribed = isSubscribed;
+        document.role = role ?? '';
         document.engagementScore = 0;
     }
     return fetchResults.filter(i => i.isSubscribed || (i.isLive && i.visible));
