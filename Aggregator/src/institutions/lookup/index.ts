@@ -38,7 +38,6 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
 
     for (const document of fetchResults) {
         let isSubscribed = false;
-        let roles = Array<string>();
         if (!!user) {
             try {
                 const team = await teams.get(document.$id);
@@ -46,15 +45,14 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
                 const { total, memberships } = await teams.listMemberships(document.$id, [
                     Query.equal("userId", user.$id),
                 ]);
-                roles = [...new Set(memberships.flatMap(m => m.roles))];
                 isSubscribed = total > 0;
+                document.role = memberships[0].roles[0]
             } catch (err) {
                 logger.error((err as Error).message);
             }
         }
 
         document.isSubscribed = isSubscribed;
-        document.roles = roles;
         document.engagementScore = 0;
     }
     return fetchResults;
