@@ -1,5 +1,5 @@
-import { Databases, Models, Query, Role, Teams } from "node-appwrite";
-import { RequestContext } from "../../models";
+import { Databases, Query, Teams } from "node-appwrite";
+import { LookupInstitution, NotFoundException, RequestContext } from "../../models";
 const dbId = "6587eefbaf2d45dc4407";
 const institutionCollectionId = "659074c14a88d2072f38";
 
@@ -8,24 +8,36 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
     const teams = new Teams(client);
     const cursor = searchParams.get('cursor');
     const size = Number(searchParams.get('size') ?? '20');
+    const id = searchParams.get('id');
+    const fields = Query.select(["name", "description", "logo", "isLive", "slug", "visible", "$id", "$createdAt", "$updatedAt"]);
+    const fetchResults = Array<LookupInstitution>();
 
-    const filters = [
-        Query.limit(size),
-        Query.orderAsc("name"),
-        Query.select(["name", "description", "logo", "isLive", "slug", "visible", "$id", "$createdAt", "$updatedAt"]),
-    ];
+    if (id) {
+        const doc = await db.getDocument<LookupInstitution>(dbId, institutionCollectionId, id, [fields]);
 
-    if (cursor)
-        filters.push(Query.cursorAfter(cursor));
+        if (!!user) {
+            try {
+                fetchResults.push(doc);
+            } catch (err) {
+                throw new NotFoundException(id);
+            }
+        }
+    } else {
+        const filters = [
+            Query.limit(size),
+            Query.orderAsc("name"),
+            fields,
+        ];
 
-    const { documents, total } = await db.listDocuments<
-        Models.Document & { isLive: boolean; visible: boolean }
-    >(dbId, institutionCollectionId, filters);
+        if (cursor)
+            filters.push(Query.cursorAfter(cursor));
 
-    if (total == 0) return [];
-    const result = Array<Models.Document & { roles: string[], isSubscribed: boolean, engagementScore: number }>();
+        const { documents, total } = await db.listDocuments<LookupInstitution>(dbId, institutionCollectionId, filters);
+        if (total == 0) return [];
+        fetchResults.push(...documents);
+    }
 
-    for (const document of documents) {
+    for (const document of fetchResults) {
         let isSubscribed = false;
         let roles = Array<string>();
         if (!!user) {
@@ -42,8 +54,9 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
             }
         }
 
-        if (isSubscribed || (document.isLive && document.visible))
-            result.push({ ...document, isSubscribed, engagementScore: 0, roles });
+        document.isSubscribed = isSubscribed;
+        document.roles = roles;
+        document.engagementScore = 0;
     }
-    return result;
+    return fetchResults;
 }
