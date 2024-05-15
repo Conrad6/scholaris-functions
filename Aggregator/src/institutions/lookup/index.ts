@@ -8,20 +8,19 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
     const teams = new Teams(client);
     const cursor = searchParams.get('cursor');
     const size = Number(searchParams.get('size') ?? '20');
-    const id = searchParams.get('id');
+    const slug = searchParams.get('slug');
     const fields = Query.select(["name", "description", "logo", "isLive", "slug", "visible", "$id", "$createdAt", "$updatedAt"]);
     const fetchResults = Array<LookupInstitution>();
 
-    if (id) {
-        const doc = await db.getDocument<LookupInstitution>(dbId, institutionCollectionId, id, [fields]);
+    if (slug) {
+        const { total, documents } = await db.listDocuments<LookupInstitution>(dbId, institutionCollectionId, [
+            Query.equal('slug', slug),
+            Query.limit(1),
+            fields
+        ]);
 
-        if (!!user) {
-            try {
-                fetchResults.push(doc);
-            } catch (err) {
-                throw new NotFoundException(id);
-            }
-        }
+        if (total == 0) throw new NotFoundException(slug);
+        fetchResults.push(...documents);
     } else {
         const filters = [
             Query.limit(size),
