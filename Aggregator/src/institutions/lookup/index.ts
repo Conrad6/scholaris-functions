@@ -38,7 +38,7 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
 
     for (const document of fetchResults) {
         let isSubscribed = false;
-        let role: string | undefined = undefined;
+        const roles = Array<string>();
         if (!!user) {
             try {
                 const team = await teams.get(document.$id);
@@ -47,14 +47,14 @@ export async function GET({ client, user, logger, requestURL: { searchParams } }
                     Query.equal("userId", user.$id),
                 ]);
                 isSubscribed = total > 0;
-                role = memberships[0].roles[0];
+                roles.push(...[...new Set<string>(memberships.filter(membership => membership.confirm).flatMap(membership => membership.roles))]);
             } catch (err) {
                 logger.error((err as Error).message);
             }
         }
 
         document.isSubscribed = isSubscribed;
-        document.role = role ?? '';
+        document.roles = roles;
         document.engagementScore = 0;
     }
     return fetchResults.filter(i => i.isSubscribed || (i.isLive && i.visible));

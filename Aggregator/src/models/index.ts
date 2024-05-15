@@ -1,7 +1,7 @@
 import { Client, Models } from "node-appwrite";
 import { URL } from "url";
 
-export type LookupInstitution = Models.Document & { role: string, isSubscribed: boolean, engagementScore: number, visible: boolean, isLive: boolean };
+export type LookupInstitution = Models.Document & { roles: string[], isSubscribed: boolean, engagementScore: number, visible: boolean, isLive: boolean };
 
 export type UserPreferences = Models.Preferences & {
     theme: 'light' | 'dark',
