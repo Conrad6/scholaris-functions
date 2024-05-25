@@ -1,10 +1,12 @@
-import handleRequest from "./request-handler";
+import handleRequest from "./handler-router";
 
 export default async ({ req, res, log, error }: any) => {
   try {
     await handleRequest(req, { log, error });
     return res.empty();
   } catch (e) {
-    return res.send(e.message, 500);
+    error((e as Error).message);
+    error((e as Error).stack);
+    return res.send((e as Error).message, 500);
   }
 };
