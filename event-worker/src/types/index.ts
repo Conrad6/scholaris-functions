@@ -1,3 +1,4 @@
+import { PureAbility } from "@casl/ability";
 import { Client, Models } from "node-appwrite";
 
 export type Logger = {
@@ -45,12 +46,24 @@ export enum SettingValueType {
 }
 
 export type InstitutionSetting = Models.Document & {
-  permissionGroup: string;
-  isSystemGenerated: string;
+  // permissionGroup: string;
+  isSystemGenerated: boolean;
   name: string;
   description?: string;
   value?: string;
   valueType: SettingValueType;
   settingsGroup?: string;
-  institutionId: Models.AttributeRelationship | null;
+  institutionId: any | null;
 };
+
+export type InstitutionPermission = Models.Document & {
+  membershipId: string;
+  rulesJson: string;
+  institutionId: any;
+}
+
+export type AppActions = 'manage' | 'read' | 'update' | 'delete' | 'create';
+export type AppSubjects = 'all' | 'institution' | 'account' | 'institution.member' | 'institution.setting';
+
+export type AbilityTypes = [AppActions, AppSubjects];
+export type PlatformAbility = PureAbility<AbilityTypes>;
