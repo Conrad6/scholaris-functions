@@ -10,7 +10,7 @@ export async function GET({ client, requestURL }: RequestContext) {
     if (!name) throw new BadRequestException('"name" query parameter is required');
 
     const { total } = await db.listDocuments(dbId, institutionCollectionId, [
-        Query.equal('name', name),
+        Query.equal('name', decodeURIComponent(name)),
         Query.limit(1)
     ]);
 
